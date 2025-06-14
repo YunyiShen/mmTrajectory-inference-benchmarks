@@ -92,7 +92,7 @@ def make_data(taskname):
 
 
 
-    elif "Repressilator_mrna" in taskname:
+    elif "Repressilatormrna" in taskname:
         repressilator_gt = repressilator_mrna(10.,3.,1.,1., 0.02)
         repressilator_gt.to(device)
         N_steps = 10 + 1
@@ -118,7 +118,7 @@ def make_data(taskname):
                            method='euler')  # (t_size, batch_size, state_size) = (100, 3, 1).
             Xs[i+1] = ys[-1]
 
-    elif "Repressilator_mrnaprotein" in taskname:
+    elif "Repressilatormrnaprotein" in taskname:
         repressilator_gt = repressilator( alpha = 1e-5, 
                                  beta_m = 10.,
                                  n = 3., 
@@ -194,7 +194,7 @@ def make_data(taskname):
                         Xs[i+1][:,1].cpu().detach().numpy())
 
 
-    filename = f"./data/{taskname}_data.npz"
+    filename = f"../asset/{taskname}_data.npz"
     np.savez(filename, 
              N_steps = N_steps,
              Xs = torch.stack(Xs).cpu().detach().numpy(),
