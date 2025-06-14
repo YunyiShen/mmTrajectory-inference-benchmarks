@@ -9,9 +9,11 @@ import matplotlib.pyplot as plt
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def get_GoMvortex():
+    
     df = pd.read_csv("../asset/hycom_GoM_part1.csv")
     df1 = pd.read_csv("../asset/hycom_GoM_part2.csv")
-    df = pd.concate([df, df1])
+    df = pd.concat([df, df1])
+    #breakpoint()
     min_lat = 24
     min_lon = -92.5
     max_lat = 27

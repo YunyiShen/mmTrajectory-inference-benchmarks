@@ -5,7 +5,7 @@ import torch.nn as nn
 import torchsde
 from scipy.spatial import cKDTree
 import matplotlib.pyplot as plt
-
+import sys
 from tqdm import tqdm
 from classic import LotkaVolterra, lorenz, repressilator_mrna
 from missingobs import langevinlamboseen, repressilator_mrnaprotein
@@ -20,7 +20,7 @@ def make_data(taskname):
     if "GoM" in taskname:
         gt = GoM(0.01)
         N_steps = 10 + 1
-        dts = torch.tensor( np.array([i for i in range(N_steps)])).to(device)/10. * 8.
+        dts = torch.tensor( 1.0*np.array([i for i in range(N_steps)])).to(device)/10. * 8.
         num_samples = 200
         X_0 = torch.rand(num_samples, 2)
         X_0[:,0] = X_0[:,0] * .1 - 0.05 
@@ -42,7 +42,7 @@ def make_data(taskname):
     elif "LV" in taskname:
         gt = LotkaVolterra(1.0, 0.4, 0.4, 0.1, 0.02)
         N_steps = 10 + 1
-        dts = torch.tensor( np.array([i for i in range(N_steps)])).to(device)
+        dts = torch.tensor( 1.0*np.array([i for i in range(N_steps)])).to(device)
         num_samples = 200
         X_0 = torch.rand(num_samples, 2)
         X_0[:,0] = X_0[:,0] * .1 + 5  # prey 
@@ -68,7 +68,7 @@ def make_data(taskname):
         lorenz_gt = lorenz(10., 28. ,8/3 , 1)
         lorenz_gt.to(device)
         N_steps = 10 + 1
-        dts = torch.tensor( np.array([i for i in range(N_steps)])/2).to(device) # until 3 works
+        dts = torch.tensor( 1.0*np.array([i for i in range(N_steps)])/2).to(device) # until 3 works
 
         num_samples = 200
         X_0 = torch.rand(num_samples, 3)
@@ -96,7 +96,7 @@ def make_data(taskname):
         repressilator_gt = repressilator_mrna(10.,3.,1.,1., 0.02)
         repressilator_gt.to(device)
         N_steps = 10 + 1
-        dts = torch.tensor( np.array([i for i in range(N_steps)])).to(device)
+        dts = torch.tensor( 1.0*np.array([i for i in range(N_steps)])).to(device)
 
         num_samples = 200
         X_0 = torch.rand(num_samples, 3)
@@ -129,7 +129,7 @@ def make_data(taskname):
                                  sigma = 0.02)
         repressilator_gt.to(device)
         N_steps = 10 + 1
-        dts = torch.tensor( np.array([i for i in range(N_steps)])).to(device)
+        dts = torch.tensor( 1.0*np.array([i for i in range(N_steps)])).to(device)
 
         num_samples = 200
         X_0 = torch.rand(num_samples, 6)
@@ -169,7 +169,7 @@ def make_data(taskname):
         langevinlamboseen_gt.to(device)
         N_steps = 10 + 1
         maxtime = 8.
-        dts = torch.tensor( np.array([i for i in range(N_steps)])).to(device)/N_steps * maxtime
+        dts = torch.tensor( 1.0*np.array([i for i in range(N_steps)])).to(device)/N_steps * maxtime
         num_samples = 200
         X_0 = torch.rand(num_samples, 4)
         X_0[:,0] = X_0[:,0] * .1 - 0.05 - 1
@@ -199,3 +199,18 @@ def make_data(taskname):
              N_steps = N_steps,
              Xs = torch.stack(Xs).cpu().detach().numpy(),
              dts = dts.cpu().detach().numpy())
+
+
+
+
+
+def main():
+    if len(sys.argv) != 2:
+        print(f"Usage: python {sys.argv[0]} <your_argument>")
+        sys.exit(1)
+    
+    task = sys.argv[1]
+    make_data(task)
+
+if __name__ == "__main__":
+    main()
